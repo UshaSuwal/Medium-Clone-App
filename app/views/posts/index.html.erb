@@ -39,6 +39,11 @@
             <% end %>
           </div>
         <% end %>
+
+
+        <%= render partial: 'likes', locals: { post: post } %>
+
+
         
         <!-- Comment form -->
         <% if current_user %>

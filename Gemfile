@@ -75,3 +75,6 @@ gem "image_processing", ">= 1.2"
 gem 'devise', '~> 4.9', '>= 4.9.3'
 
 gem 'simple_form', '~> 5.3'
+
+
+gem 'acts_as_votable', '~> 0.14.0'
