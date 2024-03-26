@@ -1,2 +1,53 @@
-
-<h1 class="m-64">Hello World</h1>
+<div class="mt-56">
+  <% @posts.each do |post| %>
+    <div class="border border-gray-200 p-4 mb-4 rounded-lg">
+      <% if post.user.photo.attached? %>
+        <%= image_tag post.user.photo, class: "rounded-full w-12 h-12 mr-2 inline-block" %>
+      <% end %>
+      
+      <div class="mb-2">
+        <span class="font-bold text-lg"><%= post.user.name %></span>
+        <span class="text-gray-600"><%= post.user.email.split('@').first %></span>
+      </div>
+      
+      <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
+      
+      <% if post.photo.attached? %>
+        <%= image_tag post.photo, class: "mb-2 rounded-lg" %>
+      <% end %>
+      
+      <p class="text-gray-800"><%= post.description %></p>
+      
+      <!-- Comments section -->
+      <div class="comments-container">
+        <% post.comments.each do |comment| %>
+          <div class="mt-4">
+            <p><%= comment.user.email.split('@').first %></p> <!-- corrected line -->
+            <%= content_tag :p, comment.description, class: 'font-bold' %> <!-- corrected line -->
+            
+            <% if comment.user == current_user %>
+              <div class='inline-block bg-blue-500 text-xs hover:bg-blue-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-pen-to-square"></i>
+                <%= link_to 'Edit ', edit_post_comment_path(post_id: post.id, id: comment.id) %>
+              </div>
+              <div class='inline-block bg-red-500 text-xs hover:bg-red-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-trash"></i>
+                <%= link_to 'Delete', post_comment_path(post_id: post.id, id: comment.id), method: :delete, data: { turbo_confirm: 'Are you sure?', "turbo-method": :delete } %>
+              </div>
+            <% elsif post.user == current_user && post.user != comment.user %>
+              <div class='inline-block bg-red-500 text-xs hover:bg-red-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-trash"></i>
+                <%= link_to 'Delete', post_comment_path(post_id: post.id, id: comment.id), method: :delete, data: { turbo_confirm: 'Are you sure?', "turbo-method": :delete } %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        
+        <!-- Comment form -->
+        <% if current_user %>
+          <%= simple_form_for Comment.new, url: post_comments_path(post), method: :post, html: { class: 'mt-4' } do |f| %>
+            <%= f.input :description, label: 'Comment', placeholder: 'Add a comment...', input_html: { class: 'mt-2', style: 'width: 200px; sm:w-full;' } %>
+            <%= f.submit 'Post', class: 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 mt-2' %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
