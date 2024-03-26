@@ -1,0 +1,10 @@
+<h1 class="m-20"> New Post </h1>
+<div class="flex justify-center">
+
+<%= simple_form_for @post do |f| %>
+  <%= f.input :photo %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+  <%= f.submit 'Post' %>
+<% end %>
+</div>

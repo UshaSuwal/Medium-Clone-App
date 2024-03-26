@@ -73,3 +73,5 @@ end
 gem "image_processing", ">= 1.2"
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
+
+gem 'simple_form', '~> 5.3'
