@@ -1,42 +1,61 @@
 <div>
-    <div class="container mx-auto">
-        <div class="pt-16 lg:pt-20">
-          <div class="border-b border-grey-lighter pb-8 sm:pb-12">
-            <span
-              class="mb-5 inline-block rounded-full bg-green-light px-2 py-1 font-body text-sm text-green sm:mb-8">category</span>
-            <h2
-              class="block font-body text-3xl font-semibold leading-tight text-primary dark:text-white sm:text-4xl md:text-5xl">
-              <%= @post.title%>
-              
-            </h2>
-            <div class="flex items-center pt-5 sm:pt-8">
-              <p class="pr-2 font-body font-light text-primary dark:text-white">
-                <%= @post.created_at.strftime("%B %d, %Y") %>
-              </p>
-              <span class="vdark:text-white font-body text-grey">//</span>
-              <p class="pl-2 font-body font-light text-primary dark:text-white">
-                4 min read
-              </p>
-              <%# <%= @post.user.email.split('@').first %>
-            </div>
+  <div class="container mx-auto">
+      <div class="pt-16 lg:pt-20">
+        <div class="border-b border-grey-lighter pb-8 sm:pb-12">
+          <span
+            class="mb-5 inline-block rounded-full bg-green-light px-2 py-1 font-body text-sm text-green sm:mb-8">category</span>
+          <h2
+            class="block font-body text-3xl font-semibold leading-tight text-primary dark:text-white sm:text-4xl md:text-5xl">
+            <%= @post.title%>
+            
+          </h2>
+          <div class="flex items-center pt-5 sm:pt-8">
+            <p class="pr-2 font-body font-light text-primary dark:text-white">
+              <%= @post.created_at.strftime("%B %d, %Y") %>
+            </p>
+            <span class="vdark:text-white font-body text-grey">//</span>
+            <p class="pl-2 font-body font-light text-primary dark:text-white">
+              4 min read
+            </p>
+            <%# <%= @post.user.email.split('@').first %>
           </div>
-          <div class="prose prose max-w-none border-b border-grey-lighter py-8 dark:prose-dark sm:py-12">
-            <%= image_tag @post.photo %>
-           <p class="text-justify"><%= @post.description %></p>
-          </div>
-          <%# likes %>
-        <div class="flex items-center">
-          <div>
-          <% if current_user && @post.likes.where(user_id: current_user.id).empty? %>
-            <%= button_to "Like", post_likes_path(@post), method: :post,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"%>
-          <% else %>
-            <% like = @post.likes.find_by(user_id: current_user.id) %>
-            <%= button_to "Unlike", post_like_path(@post, like), method: :delete,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
-          <% end %>
-          <p><%= pluralize @post.likes.count, "like" %></p>
         </div>
-          <%# bookmark %>
+        <div class="prose prose max-w-none border-b border-grey-lighter py-8 dark:prose-dark sm:py-12">
+          <%= image_tag @post.photo %>
+          <p class="text-justify"><%= @post.description %></p>
+        </div>
+        <%# likes %>
+      <div class="flex items-center">
+        <div>
+        <% if current_user && @post.likes.where(user_id: current_user.id).empty? %>
+          <%= button_to "Like", post_likes_path(@post), method: :post,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"%>
+        <% else %>
+          <% like = @post.likes.find_by(user_id: current_user.id) %>
+          <%= button_to "Unlike", post_like_path(@post, like), method: :delete,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+        <% end %>
+        <p><%= pluralize @post.likes.count, "like" %></p>
       </div>
+          <%# bookmark %>
+
+
+        <div class="flex items-center">
+        <div>
+        <% if current_user && @post.bookmarks.where(user_id: current_user.id).empty? %>
+          <%= button_to "Bookmark", post_bookmarks_path(@post), method: :post,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"%>
+        <% else %>
+          <% bookmark = @post.bookmarks.find_by(user_id: current_user.id) %>
+          <%= button_to "UnBook", post_bookmark_path(@post, bookmark), method: :delete,class:"text-black bg-black-700 hover:bg-black-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+        <% end %>
+        <p><%= pluralize @post.bookmarks.count, "Bookmark" %></p>
+      </div>
+
+
+
+
+
+
+
+    </div>
 
           <div class="px-5 py-5">
             <% @post.comments.each do |comment| %>
