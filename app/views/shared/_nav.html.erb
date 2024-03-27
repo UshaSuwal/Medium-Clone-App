@@ -1,44 +1,111 @@
-<nav class="bg-cyan-200 top-0 border-gray-200 font-dosis position: fixed w-full z-10">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-5 p-1 md:p-4">
-    <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <span class="self-center text-2xl font-semibold whitespace-nowrap font-pacifico text-[30px] tracking-[2px] text-[#337ab7]">Medium Blog</span>
-    </a>
-    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-default" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 text-lg ">
-        <% if current_user %>
-          <li>
-            <div class= "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 hover:text-red-700">
-            <i class="fa-solid fa-plus"></i>
-            <%= link_to 'New Blog', new_post_path, class: "hover:text-red-700 " %>
-            </div>
-          </li>
-          
-          <li>
-            <%= link_to 'Edit Profile', edit_user_registration_path, class:"block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 hover:text-red-700"%>
-          </li>
-          <li>
-            <%= link_to 'Logout', destroy_user_session_path, method: :delete ,data: { turbo_confirm: 'Are you sure?', turbo_method: :delete}, class: "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 hover:text-red-700" %>
-          </li>
-          
-        <% else %>
-        <li>
-            <div class= "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 hover:text-red-700">
-            <i class="fa-solid fa-plus"></i>
-            <%= link_to 'Log In', new_user_session_path, class: "hover:text-red-700 " %>
-            </div>
-          </li>
-          <li>
-            <%= link_to 'Sign Up', new_user_registration_path, class: "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 hover:text-red-700" %>
-          </li>
-          
-        <% end %>
-      </ul>
+<div class="container mx-auto">
+      <div class="flex items-center justify-between py-6 lg:py-10">
+        <a href="/" class="flex items-center">
+          <span href="/" class="mr-2">
+            <img src="/assets/img/logo.svg" alt="logo" />
+          </span>
+          <p class="hidden font-body text-2xl font-bold text-primary dark:text-white lg:block">
+            Medium Clone
+          </p>
+        </a>
+         <div class="flex items-center lg:hidden">
+          <i class="bx mr-8 cursor-pointer text-3xl text-primary dark:text-white" @click="themeSwitch()"
+            :class="isDarkMode ? 'bxs-sun' : 'bxs-moon'"></i>
+
+          <svg width="24" height="15" xmlns="http://www.w3.org/2000/svg" @click="isMobileMenuOpen = true"
+            class="fill-current text-primary dark:text-white">
+            <g fill-rule="evenodd">
+              <rect width="24" height="3" rx="1.5" />
+              <rect x="8" y="6" width="16" height="3" rx="1.5" />
+              <rect x="4" y="12" width="20" height="3" rx="1.5" />
+            </g>
+          </svg>
+        </div>
+        <div class="hidden lg:block">
+          <ul class="flex items-center">
+
+            <%# <li class="group relative mr-6 mb-1">
+              <div
+                class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+              </div>
+              <a href="/"
+                class="relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary">Intro</a>
+            </li> %>
+            <% if user_signed_in? %>
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "Blog", posts_path,class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary"%>
+                </li>
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "New Post", new_post_path,class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary" %>
+                </li>
+
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "Edit Profile",edit_user_registration_path,class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary" %>
+                </li>
+
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "Sign Out",destroy_user_session_path, method: :delete, class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary", data: { turbo_confirm: 'Are you sure?', "turbo-method": :delete } %>
+                </li>
+               <%else%>
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class="absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "Sign Up",new_user_registration_path,class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary" %>
+                </li>
+
+                <li class="group relative mr-6 mb-1">
+                <div
+                    class=" absolute left-0 bottom-0 z-20 h-0 w-full opacity-75 transition-all group-hover:h-2 group-hover:bg-yellow">
+                </div>
+                <%= link_to "Log In",new_user_session_path, method: :delete, class: "relative z-30 block px-2 font-body text-lg font-medium text-primary transition-colors group-hover:text-green dark:text-white dark:group-hover:text-secondary" %>
+                </li>
+            <%end%>
+            <li>
+              <i class="bx cursor-pointer text-3xl text-primary dark:text-white" @click="themeSwitch()"
+                :class="isDarkMode ? 'bxs-sun' : 'bxs-moon'"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</nav>
+
+    <div
+      class="pointer-events-none fixed inset-0 z-50 flex bg-black bg-opacity-80 opacity-0 transition-opacity lg:hidden"
+      :class="isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : ''">
+      <div class="ml-auto w-2/3 bg-green p-4 md:w-1/3">
+        <i class="bx bx-x absolute top-0 right-0 mt-4 mr-4 text-4xl text-white" @click="isMobileMenuOpen = false"></i>
+        <ul class="mt-8 flex flex-col">
+
+          <li class="">
+            <a href="/" class="mb-3 block px-2 font-body text-lg font-medium text-white">Intro</a>
+          </li>
+
+          <li class="">
+            <a href="/blog" class="mb-3 block px-2 font-body text-lg font-medium text-white">Blog</a>
+          </li>
+
+          <li class="">
+            <a href="/uses" class="mb-3 block px-2 font-body text-lg font-medium text-white">Sign Out</a>
+          </li>
+
+          <li class="">
+            <a href="/contact" class="mb-3 block px-2 font-body text-lg font-medium text-white">Edit Profile</a>
+          </li>
+
+        </ul>
+      </div>
+
+</div>

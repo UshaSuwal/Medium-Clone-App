@@ -6,10 +6,10 @@ class CommentsController < ApplicationController
     @post = Post.find(params[:post_id])
     @comment = @post.comments.build(comment_params.merge(user_id: current_user.id))
     if @comment.save && @comment.valid?
-      redirect_to root_path
+      redirect_to @post
     else
       flash[:alert] = "Invalid params"
-      redirect_to root_path
+      redirect_to @post
     end
   end
 
@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
     if @comment.valid?
-      redirect_to root_path
+      redirect_to @post
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment = Comment.find(params[:id])
     @comment.destroy
-    redirect_to root_path
+    redirect_to @post
   end
 
   private

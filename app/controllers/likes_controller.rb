@@ -3,17 +3,23 @@ class LikesController < ApplicationController
 
   def create
     @post = Post.find(params[:post_id])
-    @post.liked_by current_user
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("post_#{params[:post_id]}_container", partial: 'posts/likes', locals: { post: @post }) }
+    @like = current_user.likes.new(post: @post)
+
+    if @like.save
+      redirect_to @like.post, notice: 'Post liked'
+    else
+      redirect_to @like.post, alert: 'Unable to like post'
     end
   end
 
   def destroy
-    @post = Post.find(params[:post_id])
-    @post.unliked_by current_user
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("post_#{params[:post_id]}_container", partial: 'posts/likes', locals: { post: @post }) }
-    end
+    @like = current_user.likes.find(params[:id])
+    @like.destroy
+    redirect_to @like.post, notice: 'Post unliked'
   end
+
+  # def like_params
+  #     params.require(:like).permit(:post_id)
+  # end
+
 end

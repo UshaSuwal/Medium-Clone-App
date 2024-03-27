@@ -1,58 +1,72 @@
-<div class="mt-56">
-  <% @posts.each do |post| %>
-    <div class="border border-gray-200 p-4 mb-4 rounded-lg">
-      <% if post.user.photo.attached? %>
-        <%= image_tag post.user.photo, class: "rounded-full w-12 h-12 mr-2 inline-block" %>
-      <% end %>
-      
-      <div class="mb-2">
-        <span class="font-bold text-lg"><%= post.user.name %></span>
-        <span class="text-gray-600"><%= post.user.email.split('@').first %></span>
-      </div>
-      
-      <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
-      
-      <% if post.photo.attached? %>
-        <%= image_tag post.photo, class: "mb-2 rounded-lg" %>
-      <% end %>
-      
-      <p class="text-gray-800"><%= post.description %></p>
-      
-      <!-- Comments section -->
-      <div class="comments-container">
-        <% post.comments.each do |comment| %>
-          <div class="mt-4">
-            <p><%= comment.user.email.split('@').first %></p> <!-- corrected line -->
-            <%= content_tag :p, comment.description, class: 'font-bold' %> <!-- corrected line -->
-            
-            <% if comment.user == current_user %>
-              <div class='inline-block bg-blue-500 text-xs hover:bg-blue-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-pen-to-square"></i>
-                <%= link_to 'Edit ', edit_post_comment_path(post_id: post.id, id: comment.id) %>
-              </div>
-              <div class='inline-block bg-red-500 text-xs hover:bg-red-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-trash"></i>
-                <%= link_to 'Delete', post_comment_path(post_id: post.id, id: comment.id), method: :delete, data: { turbo_confirm: 'Are you sure?', "turbo-method": :delete } %>
-              </div>
-            <% elsif post.user == current_user && post.user != comment.user %>
-              <div class='inline-block bg-red-500 text-xs hover:bg-red-700 text-white py-2 px-4 rounded mr-2'><i class="fa-solid fa-trash"></i>
-                <%= link_to 'Delete', post_comment_path(post_id: post.id, id: comment.id), method: :delete, data: { turbo_confirm: 'Are you sure?', "turbo-method": :delete } %>
-              </div>
-            <% end %>
+<div>
+      <div class="container mx-auto">
+        <div class="py-16 lg:py-20">
+          <div>
+            <img src="/assets/img/icon-blog.png" alt="icon envelope" />
           </div>
-        <% end %>
 
+          <h1 class="pt-5 font-body text-4xl font-semibold text-primary dark:text-white md:text-5xl lg:text-6xl">
+            Blog
+          </h1>
 
-        <%= render partial: 'likes', locals: { post: post } %>
+          <div class="pt-3 sm:w-3/4">
+            <p class="font-body text-xl font-light text-primary dark:text-white">
+              Articles, tutorials, snippets, rants, and everything else. Subscribe for
+              updates as they happen.
+            </p>
+          </div>
 
+          <form class="flex flex-col py-12 sm:flex-row">
+            <input type="email" id="subscribe" placeholder="Drop that email here…"
+              class="w-full border border-primary bg-grey-lightest px-5 py-4 font-body font-light text-primary placeholder-primary transition-colors focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary dark:border-secondary sm:w-1/2" />
+            <button type="submit"
+              class="mt-5 bg-secondary px-10 py-4 font-body text-xl font-semibold text-white hover:bg-green sm:mt-0 md:text-2xl">
+              Subscribe
+            </button>
+          </form>
 
-        
-        <!-- Comment form -->
-        <% if current_user %>
-          <%= simple_form_for Comment.new, url: post_comments_path(post), method: :post, html: { class: 'mt-4' } do |f| %>
-            <%= f.input :description, label: 'Comment', placeholder: 'Add a comment...', input_html: { class: 'mt-2', style: 'width: 200px; sm:w-full;' } %>
-            <%= f.submit 'Post', class: 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 mt-2' %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+          <div class="pt-8 lg:pt-12">
+            
+            <% @posts.each do |post|%>
+              <div class="border-b border-grey-lighter pb-8">
+                <span
+                  class="mb-4 inline-block rounded-full bg-green-light px-2 py-1 font-body text-sm text-green">category</span>
+                <%= link_to post_path(post), class: "block font-body text-lg font-semibold text-primary transition-colors hover:text-green dark:text-white dark:hover:text-secondary" do %>
+                  <%= post.title%>
+                  <% end %>
+                  
+                <div class="flex items-center pt-4">
+                  <p class="pr-2 font-body font-light text-primary dark:text-white">
+                    <%= post.created_at.strftime("%B %d, %Y") %>
+                  </p>
+                  <span class="font-body text-grey dark:text-white">//</span>
+                  <p class="pl-2 font-body font-light text-primary dark:text-white">
+                    4 min read
+                  </p>
+                </div>
+              </div>
+            <%end%>
+            
+          </div>
+
+          <script src="/assets/js/main.js"></script>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
